@@ -1,103 +1,68 @@
-import Image from "next/image";
+// src/app/page.js
+"use client"; // Necesario para usar hooks como useState para el hover
 
-export default function Home() {
+import Link from 'next/link';
+import { useState } from 'react';
+
+export default function HomePage() {
+  const [isHovered, setIsHovered] = useState(false);
+
+  const styles = {
+    mainContainer: {
+      display: 'flex',
+      flexDirection: 'column',
+      justifyContent: 'center',
+      alignItems: 'center',
+      height: '100vh',
+      textAlign: 'center',
+      backgroundColor: '#121212', // Un negro más suave y moderno
+      color: '#ffffff',
+    },
+    title: {
+      fontSize: '3.5rem', // Letra grande y llamativa
+      fontWeight: '700',
+      marginBottom: '1rem',
+      textShadow: '0px 2px 10px rgba(0, 0, 0, 0.5)', // Sombra para darle profundidad
+    },
+    subtitle: {
+      fontSize: '1.25rem',
+      fontWeight: '400',
+      color: '#b3b3b3', // Un gris claro para el subtítulo
+      maxWidth: '500px',
+      marginBottom: '2.5rem',
+    },
+    loginButton: {
+      padding: '15px 35px',
+      fontSize: '1rem',
+      fontWeight: 'bold',
+      color: 'white',
+      backgroundColor: '#007bff',
+      border: 'none',
+      borderRadius: '50px', // Bordes completamente redondeados
+      cursor: 'pointer',
+      textDecoration: 'none',
+      transition: 'all 0.3s ease', // Transición suave para todos los efectos
+      boxShadow: isHovered ? '0px 5px 20px rgba(0, 123, 255, 0.4)' : '0px 2px 10px rgba(0, 0, 0, 0.3)',
+      transform: isHovered ? 'translateY(-3px)' : 'translateY(0)',
+    }
+  };
+
   return (
-    <div className="font-sans grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="font-mono list-inside list-decimal text-sm/6 text-center sm:text-left">
-          <li className="mb-2 tracking-[-.01em]">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] font-mono font-semibold px-1 py-0.5 rounded">
-              src/app/page.js
-            </code>
-            .
-          </li>
-          <li className="tracking-[-.01em]">
-            Save and see your changes instantly.
-          </li>
-        </ol>
-
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
-        </div>
-      </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
+    <main style={styles.mainContainer}>
+      <h1 style={styles.title}>Sistema de Gestión</h1>
+      <p style={styles.subtitle}>
+        La solución centralizada para administrar tus productos, pedidos y clientes.
+      </p>
+      
+      <Link href="/login" passHref>
+        <button
+          style={styles.loginButton}
+          onMouseEnter={() => setIsHovered(true)}
+          onMouseLeave={() => setIsHovered(false)}
         >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
-    </div>
+          Iniciar Sesión
+        </button>
+      </Link>
+    </main>
   );
 }

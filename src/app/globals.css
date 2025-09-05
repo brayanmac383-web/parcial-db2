@@ -24,3 +24,20 @@ body {
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
 }
+/* src/app/globals.css */
+
+/* ... (tu código CSS existente) ... */
+
+/* ESTILOS AÑADIDOS PARA MEJORAR EL LOGIN */
+/* Hacemos el texto del placeholder más oscuro y legible */
+input::placeholder {
+  color: #6c757d; /* Un gris más oscuro */
+  opacity: 1; /* Asegura que el color no sea transparente */
+}
+
+/* Opcional: Cambia el color del borde al enfocar el input */
+input:focus {
+  outline: none;
+  border-color: #007bff;
+  box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.25);
+}

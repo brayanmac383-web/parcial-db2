@@ -2,8 +2,9 @@
 "use server";
 
 import { redirect } from 'next/navigation';
-import { getSession } from './session'; // Asegúrate que session.js exista en /lib
-import pool from '@/lib/db'; // IMPORTANTE: Usa la conexión local
+// CAMBIO: Importamos desde nuestro nuevo archivo 'auth.js'
+import { getSession, createSession, deleteSession } from './auth';
+import pool from '@/lib/db';
 import { revalidatePath } from 'next/cache';
 
 export async function login(prevState, formData) {
@@ -14,22 +15,14 @@ export async function login(prevState, formData) {
     const result = await pool.query('SELECT id, nombre, email, puesto, password FROM usuarios WHERE email = $1', [email]);
     const user = result.rows[0];
 
-    if (!user) {
-      return { message: 'El correo electrónico no está registrado.' };
-    }
-    const passwordsMatch = (password === user.password);
-    if (!passwordsMatch) {
-      return { message: 'Contraseña incorrecta.' };
-    }
+    if (!user) return { message: 'El correo electrónico no está registrado.' };
+    if (password !== user.password) return { message: 'Contraseña incorrecta.' };
+    
+    // Inicia la sesión con nuestro nuevo sistema
+    await createSession(user);
 
-    const session = await getSession();
-    session.isLoggedIn = true;
-    session.userId = user.id;
-    session.nombre = user.nombre;
-    session.rol = user.puesto.toLowerCase();
-    await session.save();
-
-    if (session.rol === 'gerente') {
+    // La redirección sigue igual
+    if (user.puesto.toLowerCase() === 'gerente') {
       redirect('/gestionAdmin');
     } else {
       redirect('/gestionEmpleado');
@@ -42,12 +35,13 @@ export async function login(prevState, formData) {
 }
 
 export async function logout() {
-    const session = await getSession();
-    session.destroy();
-    redirect('/login');
+  // Cierra la sesión con nuestro nuevo sistema
+  await deleteSession();
+  redirect('/login');
 }
 
 export async function getProducts() {
+  // ... esta función no cambia ...
   try {
     const result = await pool.query('SELECT id, nombre, valor, stock FROM productos ORDER BY id DESC');
     return result.rows;
@@ -58,8 +52,9 @@ export async function getProducts() {
 }
 
 export async function deleteProduct(productId) {
+  // ... esta función no cambia ...
   const session = await getSession();
-  if (!session.isLoggedIn || session.rol !== 'gerente') {
+  if (!session || session.rol !== 'gerente') {
     throw new Error('No autorizado para realizar esta acción.');
   }
   try {

@@ -9,7 +9,6 @@
     "lint": "eslint"
   },
   "dependencies": {
-    "@vercel/postgres": "^0.10.0",
     "iron-session": "^8.0.4",
     "next": "15.5.2",
     "pg": "^8.16.3",

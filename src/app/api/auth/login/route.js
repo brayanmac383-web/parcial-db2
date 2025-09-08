@@ -30,3 +30,39 @@ export async function POST(request) {
   }
 }
 
+export async function GET() {
+  try {
+    // Consulta para obtener todos los productos
+    const productosResult = await pool.query('SELECT * FROM productos ORDER BY id_product');
+    const productos = productosResult.rows;
+
+    // Consulta para obtener todos los pedidos
+    const pedidosResult = await pool.query('SELECT * FROM pedidos ORDER BY id_orders DESC');
+    const pedidos = pedidosResult.rows;
+
+    // Consulta para obtener todos los usuarios
+    const usuariosResult = await pool.query('SELECT * FROM usuarios ORDER BY id_user');
+    const usuarios = usuariosResult.rows;
+
+    // Consulta para obtener todos los clientes
+    const clientesResult = await pool.query('SELECT * FROM clientes ORDER BY id_client');
+    const clientes = clientesResult.rows;
+    
+    // Consulta para calcular las ventas totales (asumiendo que hay una columna 'total' en la tabla 'pedidos')
+    const ventasResult = await pool.query('SELECT SUM(total) as total_ventas FROM pedidos');
+    const ventasTotales = ventasResult.rows[0].total_ventas || 0;
+
+    const data = {
+      usuarios,
+      clientes,
+      productos,
+      pedidos,
+      ventasTotales: parseFloat(ventasTotales)
+    };
+
+    return NextResponse.json(data, { status: 200 });
+  } catch (error) {
+    console.error('Error al obtener datos del dashboard:', error);
+    return NextResponse.json({ message: 'Error interno del servidor al obtener datos' }, { status: 500 });
+  }
+}
